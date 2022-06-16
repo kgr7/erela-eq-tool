@@ -1,9 +1,12 @@
+import { useState } from "react";
 import Slider from "./Slider";
 
+interface FreqMapping {
+  [key: number]: string;
+}
+
 export default () => {
-  interface FreqMapping {
-    [key: number]: string;
-  }
+  const [showCopiedMessage, setShowCopiedMessage] = useState<boolean>(false);
 
   const freqs: FreqMapping = {
     0: "25",
@@ -23,7 +26,7 @@ export default () => {
     14: "16k",
   };
 
-  const getSliderValues = () => {
+  const getSliderValues = (): Array<Element> => {
     const sliderValues = document.querySelectorAll("span[class=slider-value]");
     return Array.from(sliderValues);
   };
@@ -31,12 +34,32 @@ export default () => {
   const copyResultToClipboard = () => {
     const eqResult = document.getElementById("result");
     navigator.clipboard.writeText(eqResult?.innerHTML ?? "");
+    animateResultBar();
+    setTimeout(() => {
+      setShowCopiedMessage(false);
+    }, 750);
+    setShowCopiedMessage(true);
+  };
+
+  const animateResultBar = () => {
+    const resultBar: HTMLElement | null = document.getElementById("resultBar");
+    if (resultBar) {
+      resultBar.classList.add("fadeIn");
+      resultBar.onanimationend = () => {
+        resultBar.classList.remove("fadeIn");
+      };
+    }
   };
 
   const sliders = [];
   for (let i = 0; i < 15; i++) {
     sliders.push(
-      <Slider hz={freqs[i]} getSliderValues={getSliderValues} key={i} />
+      <Slider
+        hz={freqs[i]}
+        getSliderValues={getSliderValues}
+        key={i}
+        sliderId={i}
+      />
     );
   }
 
@@ -55,7 +78,7 @@ export default () => {
         }}
         className="result-container"
       >
-        <div className="result">
+        <div id="resultBar" className="result">
           <pre
             style={{ marginLeft: "4px", marginRight: "4px" }}
             id="result"
@@ -67,7 +90,7 @@ export default () => {
                 padding: "0.15em",
               }}
             >
-              &#128203;
+              {showCopiedMessage ? "✅" : "📋"}
             </span>
           </div>
         </div>
