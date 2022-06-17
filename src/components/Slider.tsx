@@ -17,7 +17,6 @@ export default (props: ISliderState) => {
 
   useEffect(() => {
     let result = document.getElementById("result")!;
-    console.log(props.getSliderValues()[0]);
     result.innerHTML = `${props
       .getSliderValues()
       .map((value: Element) => " " + value.innerHTML)}`.replaceAll(",", "");
