@@ -41,7 +41,7 @@ export default (props: ISliderState) => {
         relativeKnobPosition < 0 ? 0 : relativeKnobPosition;
 
       knob.style.transform = `translateY(${
-        relativeKnobPosition - y - knob.getBoundingClientRect().height - 7.5
+        relativeKnobPosition - y - knob.getBoundingClientRect().height + 19
       }px)`;
     }
   };
