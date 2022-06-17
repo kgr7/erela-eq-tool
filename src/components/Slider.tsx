@@ -9,7 +9,7 @@ interface ISliderState {
 }
 
 export default (props: ISliderState) => {
-  const [sliderValue, setSliderValue] = useState(0.25 as number);
+  const [sliderValue, setSliderValue] = useState(0 as number);
 
   useEffect(() => {
     positionKnobFromValue();
