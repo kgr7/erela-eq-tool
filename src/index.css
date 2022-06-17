@@ -30,7 +30,7 @@ li {
 
 .main {
   font-weight: 500;
-  margin: 1em 10em auto 10em;
+  margin: 1em;
   border: 1px solid #e1e1e1;
   border-radius: 5px;
   padding: 1em;
@@ -66,8 +66,8 @@ li {
 }
 
 .knob {
-  height: 1em;
-  width: 3em;
+  height: 4em;
+  width: 2.5em;
   background-color: #000;
   display: inline-block;
   position: absolute;

@@ -17,12 +17,10 @@ export default (props: ISliderState) => {
 
   useEffect(() => {
     let result = document.getElementById("result")!;
-    result.innerHTML =
-      "[" +
-      `${props
-        .getSliderValues()
-        .map((value: Element) => " " + value.innerHTML)}`.trimStart() +
-      "]";
+    console.log(props.getSliderValues()[0]);
+    result.innerHTML = `${props
+      .getSliderValues()
+      .map((value: Element) => " " + value.innerHTML)}`.replaceAll(",", "");
   }, [sliderValue]);
 
   const positionKnobFromValue = () => {
