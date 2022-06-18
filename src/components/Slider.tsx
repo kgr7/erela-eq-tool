@@ -1,35 +1,36 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { scale } from "../util";
 import Knob from "./Knob";
 
 interface ISliderState {
   hz: string;
   sliderId: number;
-  getSliderValues: () => Array<Element>;
+  activePreset: number;
+  setSliderValues: (value: SetStateAction<number[]>) => void;
+  setPresetIsActive: (isActive: boolean) => void;
+  sliderValue: number;
+  presetIsActive: boolean;
 }
 
 export default (props: ISliderState) => {
-  const [sliderValue, setSliderValue] = useState(0 as number);
-
   useEffect(() => {
     positionKnobFromValue();
+    props.setPresetIsActive(false);
   }, []);
 
   useEffect(() => {
-    let result = document.getElementById("result")!;
-    result.innerHTML = `${props
-      .getSliderValues()
-      .map((value: Element) => " " + value.innerHTML)}`.replaceAll(",", "");
-  }, [sliderValue]);
+    positionKnobFromValue();
+    props.setPresetIsActive(false);
+  }, [props.activePreset]);
 
   const positionKnobFromValue = () => {
     const knob = document.getElementById(`knob-${props.sliderId}`);
     const slider = document.getElementById(`slider-${props.sliderId}`);
 
     if (slider !== null && knob) {
-      const { x, y, height } = slider?.getBoundingClientRect();
+      const { y, height } = slider?.getBoundingClientRect();
       let relativeKnobPosition = scale(
-        +sliderValue.toFixed(2), // :/
+        +props.activePreset.toFixed(2), // :/
         1,
         -0.25,
         0,
@@ -49,9 +50,13 @@ export default (props: ISliderState) => {
   return (
     <div>
       <div id={"slider-" + props.sliderId} className="slider">
-        <Knob knobId={"knob-" + props.sliderId} setSlider={setSliderValue} />
+        <Knob knobId={props.sliderId} setSlider={props.setSliderValues} />
       </div>
-      <span className="slider-value">{sliderValue.toFixed(2)}</span>
+      <span className="slider-value">
+        {props.presetIsActive
+          ? props.activePreset.toFixed(2)
+          : props.sliderValue.toFixed(2)}
+      </span>
       <br />
       <span className="freq-range">{props.hz}hz</span>
     </div>

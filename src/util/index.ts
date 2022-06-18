@@ -8,5 +8,15 @@ const scale = (
     return ((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   };
 
-  export { scale }
+const toggleClass = (target: string, className: string) => {
+  const element: HTMLElement | null = document.getElementById(target);
+  if (element) {
+    element.classList.add(className);
+    element.onanimationend = () => {
+      element.classList.remove(className);
+    };
+  }
+};
+
+export { scale, toggleClass }
   

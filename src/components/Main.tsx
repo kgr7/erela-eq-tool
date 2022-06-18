@@ -1,5 +1,9 @@
 import { useState } from "react";
 import Slider from "./Slider";
+import SavePreset from "./SavePreset";
+import PresetPanel from "./PresetPanel";
+import { getSliderValues, IPreset } from "../services/LocalStorageService";
+import { toggleClass } from "../util";
 
 interface FreqMapping {
   [key: number]: string;
@@ -7,6 +11,10 @@ interface FreqMapping {
 
 export default () => {
   const [showCopiedMessage, setShowCopiedMessage] = useState<boolean>(false);
+  const [presets, setPresets] = useState<IPreset[]>();
+  const [activePreset, setActivePreset] = useState<IPreset>();
+  const [sliderValues, setSliderValues] = useState<number[]>(Array(15).fill(0));
+  const [presetIsActive, setPresetIsActive] = useState<boolean>(false);
 
   const freqs: FreqMapping = {
     0: "25",
@@ -26,29 +34,10 @@ export default () => {
     14: "16k",
   };
 
-  const getSliderValues = (): Array<Element> => {
-    const sliderValues = document.querySelectorAll("span[class=slider-value]");
-    return Array.from(sliderValues);
-  };
-
   const copyResultToClipboard = () => {
     const eqResult = document.getElementById("result");
     navigator.clipboard.writeText(eqResult?.innerHTML ?? "");
-    animateResultBar();
-    setTimeout(() => {
-      setShowCopiedMessage(false);
-    }, 750);
-    setShowCopiedMessage(true);
-  };
-
-  const animateResultBar = () => {
-    const resultBar: HTMLElement | null = document.getElementById("resultBar");
-    if (resultBar) {
-      resultBar.classList.add("fadeIn");
-      resultBar.onanimationend = () => {
-        resultBar.classList.remove("fadeIn");
-      };
-    }
+    toggleClass("resultBar", "fadeIn");
   };
 
   const sliders = [];
@@ -56,45 +45,62 @@ export default () => {
     sliders.push(
       <Slider
         hz={freqs[i]}
-        getSliderValues={getSliderValues}
         key={i}
         sliderId={i}
+        activePreset={activePreset?.sliderValues[i] ?? 0}
+        setSliderValues={setSliderValues}
+        sliderValue={sliderValues[i]}
+        setPresetIsActive={setPresetIsActive}
+        presetIsActive
       />
     );
   }
 
+  console.log("re render");
+
   return (
-    <section className="main">
-      <p className="main-text">
-        Configure EQ presets for Discord music bots that use ErelaJS.
-      </p>
-      <p className="main-text">Copy to clipboard when you've finised.</p>
-      <section className="eq-panel">{sliders}</section>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-        className="result-container"
-      >
-        <div id="resultBar" className="result">
-          <pre
-            style={{ marginLeft: "4px", marginRight: "4px" }}
-            id="result"
-          ></pre>
-          <div className="copy-to-clipboard" onClick={copyResultToClipboard}>
-            <span
-              style={{
-                fontSize: 32,
-                padding: "0.15em",
-              }}
-            >
-              {showCopiedMessage ? "✅" : "📋"}
-            </span>
+    <main>
+      <section className="main-panel">
+        <p className="main-text">
+          Configure EQ presets for Discord music bots that use ErelaJS.
+        </p>
+        <p className="main-text">Copy to clipboard when you've finised.</p>
+        <section className="eq-panel">{sliders}</section>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+          className="result-container"
+        >
+          <div id="resultBar" className="result">
+            <pre style={{ marginLeft: "4px", marginRight: "4px" }} id="result">
+              {presetIsActive
+                ? activePreset?.sliderValues.map(
+                    (value) => " " + value.toFixed(2)
+                  )
+                : sliderValues.map((value) => " " + value.toFixed(2))}
+            </pre>
+            <div className="copy-to-clipboard" onClick={copyResultToClipboard}>
+              <span
+                style={{
+                  fontSize: 32,
+                  padding: "0.15em",
+                }}
+              >
+                {showCopiedMessage ? "✅" : "📋"}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+        <SavePreset setPresets={setPresets} />
+      </section>
+      <PresetPanel
+        presets={presets!}
+        setActivePreset={setActivePreset}
+        setPresetIsActive={setPresetIsActive}
+      />
+    </main>
   );
 };

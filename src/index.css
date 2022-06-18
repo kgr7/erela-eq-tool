@@ -28,7 +28,7 @@ li {
   font-weight: bold;
 }
 
-.main {
+.main-panel {
   font-weight: 500;
   margin: 1em;
   border: 1px solid #e1e1e1;
@@ -106,8 +106,18 @@ li {
   box-shadow: 0px 0px 0.25em 0.25em #4BB543;
 }
 
+.input-error {
+  animation: blink-error 0.75s ease-out;
+  border: 2px solid #dc2020;
+  box-shadow: 0px 0px 0.25em 0.25em #dc2020;
+}
+
 @keyframes blink {
-  100% { box-shadow: 0px 0px 0px 0.25em rgba(0,0,0,0.0); }
+  100% { box-shadow: 0px 0px 0px 0.25em rgba(0,0,0,0); }
+}
+
+@keyframes blink-error {
+  100% { box-shadow: 0px 0px 0px 0.25em rgba(0,0,0,0); }
 }
 
 .copy-to-clipboard {
@@ -115,4 +125,52 @@ li {
   height: 100%;
   border-left: 2px solid #a0a0a0;
   cursor: pointer;
+}
+
+.save-preset {
+  margin-top: 0.25em; 
+  width: 100%;
+  height: 3em;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.save-preset input {
+  padding: 0.5em;
+  font-family: inherit;
+  margin: 0.15em;
+  border-radius: 5px;
+  border: 2px solid #b3b3b3;
+}
+
+.save-preset input[type="text"] {
+  width: 20em;
+}
+
+.save-preset input[type="submit"]:hover {
+  cursor: pointer;
+  background: #b3b3b3;
+}
+
+.preset-panel {
+  text-align: center;
+}
+
+.preset-item {
+  cursor: pointer;
+  vertical-align: bottom;
+  background-color: #e3e3e3;
+  display: inline-block;
+  margin: 2em;
+  width: 16em;
+  height: 9em;
+  border: 1px solid #a3a3a3;
+  border-radius: 0.25em;
+}
+
+.recharts-wrapper {
+  cursor: pointer !important;
+  margin-top: 20px;
 }

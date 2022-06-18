@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, SetStateAction } from "react";
 import { scale } from "../util";
 
 interface IKnobState {
-  knobId: string;
-  setSlider: (db: number) => void;
+  knobId: number;
+  setSlider: (value: SetStateAction<number[]>) => void;
 }
 
 interface IDragProps {
@@ -21,6 +21,15 @@ interface IStartDrag {
 export default (props: IKnobState) => {
   const elemRef = useRef<HTMLDivElement>(null);
   const dragProps = useRef<IDragProps>();
+
+  const setSliderValue = (db: number) => {
+    props.setSlider((prevState: number[]): number[] => {
+      return prevState.map((value, index) => {
+        if (index == props.knobId) return db;
+        return value;
+      });
+    });
+  };
 
   const initialiseDrag = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -77,12 +86,12 @@ export default (props: IKnobState) => {
     let db = scale(knobRelativeY, lengthOfSlider, 0, -0.25, 1);
     db = db > 1 ? 1 : db;
     db = db < -0.25 ? -0.25 : db;
-    props.setSlider(db);
+    setSliderValue(db);
   };
 
   return (
     <div
-      id={props.knobId}
+      id={`knob-${props.knobId}`}
       className="knob"
       onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         initialiseDrag(e)
