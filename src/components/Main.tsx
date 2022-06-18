@@ -9,12 +9,21 @@ interface FreqMapping {
   [key: number]: string;
 }
 
+interface ISliderValue {
+  index: number;
+  value: number;
+}
+
 export default () => {
   const [showCopiedMessage, setShowCopiedMessage] = useState<boolean>(false);
   const [presets, setPresets] = useState<IPreset[]>();
   const [activePreset, setActivePreset] = useState<IPreset>();
-  const [sliderValues, setSliderValues] = useState<number[]>(Array(15).fill(0));
+  const [allSliderValues, setAllSliderValues] = useState<string>();
   const [presetIsActive, setPresetIsActive] = useState<boolean>(false);
+
+  if (presetIsActive) {
+    setPresetIsActive(false);
+  }
 
   const freqs: FreqMapping = {
     0: "25",
@@ -47,16 +56,10 @@ export default () => {
         hz={freqs[i]}
         key={i}
         sliderId={i}
-        activePreset={activePreset?.sliderValues[i] ?? 0}
-        setSliderValues={setSliderValues}
-        sliderValue={sliderValues[i]}
-        setPresetIsActive={setPresetIsActive}
-        presetIsActive
+        setAllSliderValues={setAllSliderValues}
       />
     );
   }
-
-  console.log("re render");
 
   return (
     <main>
@@ -76,11 +79,7 @@ export default () => {
         >
           <div id="resultBar" className="result">
             <pre style={{ marginLeft: "4px", marginRight: "4px" }} id="result">
-              {presetIsActive
-                ? activePreset?.sliderValues.map(
-                    (value) => " " + value.toFixed(2)
-                  )
-                : sliderValues.map((value) => " " + value.toFixed(2))}
+              {allSliderValues}
             </pre>
             <div className="copy-to-clipboard" onClick={copyResultToClipboard}>
               <span
