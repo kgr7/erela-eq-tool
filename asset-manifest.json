@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/erela-eq-tool/static/css/main.44e09601.css",
-    "main.js": "/erela-eq-tool/static/js/main.9789bb7c.js",
+    "main.js": "/erela-eq-tool/static/js/main.f6db132f.js",
     "static/js/787.f5b99158.chunk.js": "/erela-eq-tool/static/js/787.f5b99158.chunk.js",
     "index.html": "/erela-eq-tool/index.html",
     "main.44e09601.css.map": "/erela-eq-tool/static/css/main.44e09601.css.map",
-    "main.9789bb7c.js.map": "/erela-eq-tool/static/js/main.9789bb7c.js.map",
+    "main.f6db132f.js.map": "/erela-eq-tool/static/js/main.f6db132f.js.map",
     "787.f5b99158.chunk.js.map": "/erela-eq-tool/static/js/787.f5b99158.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.44e09601.css",
-    "static/js/main.9789bb7c.js"
+    "static/js/main.f6db132f.js"
   ]
 }
